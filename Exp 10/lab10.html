@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Walk Simulation</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: #f4f4f4;
+        }
+        canvas {
+            border: 1px solid black;
+            margin-top: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Random Walk Simulation</h2>
+
+<input type="number" id="steps" placeholder="Enter number of steps">
+<button onclick="runSimulation()">Run Simulation</button>
+
+<br>
+<canvas id="graph" width="600" height="300"></canvas>
+
+<script>
+function runSimulation() {
+    let steps = document.getElementById("steps").value;
+
+    let position = 0;
+    let data = [position];
+
+    for (let i = 0; i < steps; i++) {
+        let step = Math.random() < 0.5 ? -1 : 1;
+        position += step;
+        data.push(position);
+    }
+
+    drawGraph(data);
+}
+
+function drawGraph(data) {
+    let canvas = document.getElementById("graph");
+    let ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let max = Math.max(...data);
+    let min = Math.min(...data);
+
+    let scaleX = canvas.width / data.length;
+    let scaleY = canvas.height / (max - min + 1);
+
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height / 2);
+
+    for (let i = 0; i < data.length; i++) {
+        let x = i * scaleX;
+        let y = canvas.height - ((data[i] - min) * scaleY);
+        ctx.lineTo(x, y);
+    }
+
+    ctx.stroke();
+}
+</script>
+
+</body>
+</html>
